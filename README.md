@@ -3,7 +3,9 @@
 AgileFlow is a high-performance, visually stunning project management platform designed for modern agile teams. Inspired by tools like Linear and Jira, it focuses on speed, clarity, and a premium user experience.
 
 ![AgileFlow Dashboard](https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1200&h=600&fit=crop)
-![AgileFlow Vedio presentation](https://drive.google.com/file/d/1imSo1Ep3cOvoMblFZw0uO-5O-kvy9u5E/view?usp=sharing)
+
+
+vedio presentation link - https://drive.google.com/file/d/1imSo1Ep3cOvoMblFZw0uO-5O-kvy9u5E/view?usp=sharing
 ## ✨ Key Features
 
 ### 🔐 Advanced Authentication
