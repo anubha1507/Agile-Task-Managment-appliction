@@ -188,16 +188,38 @@ export function SettingsPage() {
     }
   };
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 1024 * 1024) {
-        toast.error("File size must be less than 1MB");
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("File size must be less than 2MB");
         return;
       }
-      const url = URL.createObjectURL(file);
-      setAvatarUrl(url);
-      toast.success("Avatar updated! Save your profile to persist.");
+
+      setUploadingAvatar(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from('avatars').getPublicUrl(fileName);
+      setAvatarUrl(data.publicUrl);
+      toast.success("Avatar uploaded! Save your profile to apply changes.");
+    } catch (error: any) {
+      toast.error("Error uploading avatar: " + error.message);
+    } finally {
+      setUploadingAvatar(false);
     }
   };
 
@@ -244,7 +266,7 @@ export function SettingsPage() {
         {/* ── PROFILE TAB ── */}
         {activeTab === "profile" && (
           <div className="p-6 sm:p-8">
-            <h2 className="text-lg font-semibold mb-6">Public Profile</h2>
+            <h2 className="text-lg font-semibold mb-6">Profile Settings</h2>
             <div className="flex items-center gap-6 mb-8">
               <Avatar className="w-20 h-20 border border-neutral-200 dark:border-neutral-800">
                 <AvatarImage src={avatarUrl} alt="User Avatar" className="object-cover" />
@@ -253,14 +275,17 @@ export function SettingsPage() {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <input type="file" ref={fileInputRef} onChange={handleAvatarChange} accept="image/*" className="hidden" />
+                <input type="file" ref={fileInputRef} onChange={handleAvatarChange} accept="image/*" className="hidden" disabled={uploadingAvatar} />
                 <button
+                  type="button"
+                  disabled={uploadingAvatar}
                   onClick={() => fileInputRef.current?.click()}
-                  className="bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white px-4 py-2 text-sm font-medium rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors mb-2 flex items-center gap-2"
+                  className="bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white px-4 py-2 text-sm font-medium rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors mb-2 flex items-center gap-2 disabled:opacity-50"
                 >
-                  <Upload className="w-4 h-4" /> Change Avatar
+                  {uploadingAvatar ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />} 
+                  {uploadingAvatar ? "Uploading..." : "Change Avatar"}
                 </button>
-                <p className="text-xs text-neutral-500">JPG, GIF or PNG. 1MB max.</p>
+                <p className="text-xs text-neutral-500">JPG, GIF or PNG. 2MB max.</p>
               </div>
             </div>
             <form className="space-y-5 max-w-lg" onSubmit={handleSaveProfile}>

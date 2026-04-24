@@ -143,3 +143,10 @@ ALTER TABLE public.project_members DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.project_lists DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tasks DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.task_activity DISABLE ROW LEVEL SECURITY;
+
+-- =========================================================
+-- STORAGE
+-- =========================================================
+insert into storage.buckets (id, name, public) 
+values ('avatars', 'avatars', true) 
+on conflict (id) do nothing;

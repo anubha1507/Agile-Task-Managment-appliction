@@ -59,7 +59,7 @@ const Column = ({ list, tasks, moveTask, onAddTask }: { list: any, tasks: any[],
   }));
 
   return (
-    <div className="flex flex-col w-80 shrink-0">
+    <div className="flex flex-col w-full md:w-80 shrink-0">
       <div className="flex items-center justify-between mb-4 px-1">
         <div className="flex items-center gap-2">
           <h3 className="font-semibold text-sm">{list.name}</h3>
@@ -73,7 +73,7 @@ const Column = ({ list, tasks, moveTask, onAddTask }: { list: any, tasks: any[],
       </div>
       <div
         ref={dropRef}
-        className={`flex-1 rounded-xl p-2 min-h-[500px] transition-colors ${
+        className={`flex-1 rounded-xl p-2 md:min-h-[500px] transition-colors ${
           isOver ? "bg-neutral-100 dark:bg-neutral-800/50" : "bg-neutral-50 dark:bg-[#111113] border border-transparent dark:border-neutral-800/30"
         }`}
       >
@@ -228,11 +228,11 @@ export function ProjectDetailsPage() {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-x-auto overflow-y-hidden bg-neutral-50 dark:bg-[#0E0E11]">
+        <div className="flex-1 overflow-x-hidden md:overflow-x-auto overflow-y-auto md:overflow-y-hidden bg-neutral-50 dark:bg-[#0E0E11] pb-[100px] md:pb-0">
           {activeTab === "board" && (
-            <div className="flex gap-6 h-full items-start p-8">
+            <div className="flex flex-col md:flex-row gap-6 h-full items-start p-4 md:p-8 overflow-y-visible md:overflow-y-hidden pb-12">
               {lists.map((list) => (
-                <div key={list.id} className="flex flex-col">
+                <div key={list.id} className="flex flex-col w-full md:w-auto">
                   <Column
                     list={list}
                     tasks={tasks.filter((t) => t.list_id === list.id)}
@@ -240,7 +240,7 @@ export function ProjectDetailsPage() {
                     onAddTask={(listId) => setAddingTaskToList(listId)}
                   />
                   {addingTaskToList === list.id && (
-                    <form onSubmit={handleCreateTask} className="mt-2 w-80">
+                    <form onSubmit={handleCreateTask} className="mt-2 w-full md:w-80">
                       <input 
                         type="text" 
                         autoFocus
@@ -250,15 +250,15 @@ export function ProjectDetailsPage() {
                         className="w-full px-3 py-2 text-sm rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#1C1C1E]"
                       />
                       <div className="flex gap-2 mt-2">
-                        <button type="submit" className="px-3 py-1 bg-blue-500 text-white text-xs rounded-md">Save</button>
-                        <button type="button" onClick={() => setAddingTaskToList(null)} className="px-3 py-1 bg-neutral-200 dark:bg-neutral-800 text-xs rounded-md">Cancel</button>
+                        <button type="submit" className="px-3 py-2 md:py-1 bg-blue-500 text-white text-xs rounded-md font-medium">Save</button>
+                        <button type="button" onClick={() => setAddingTaskToList(null)} className="px-3 py-2 md:py-1 bg-neutral-200 dark:bg-neutral-800 text-xs rounded-md font-medium">Cancel</button>
                       </div>
                     </form>
                   )}
                 </div>
               ))}
-              <div className="w-80 shrink-0">
-                <button onClick={handleAddList} className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white transition-colors">
+              <div className="w-full md:w-80 shrink-0">
+                <button onClick={handleAddList} className="w-full flex items-center justify-center gap-2 py-4 md:py-3 rounded-xl border border-dashed border-neutral-300 dark:border-neutral-700 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   <Plus className="w-4 h-4" /> Add List
                 </button>
               </div>

@@ -120,27 +120,27 @@ export function ProjectsPage() {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-6 pb-20">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 pb-20">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight mb-1">Projects</h1>
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight mb-1">Projects</h1>
           <p className="text-sm text-neutral-500 dark:text-neutral-400">Manage and track all your active projects.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center bg-white dark:bg-[#161618] border border-neutral-200 dark:border-neutral-800 rounded-md p-1">
-            <button onClick={() => setView("grid")} className={`p-1.5 rounded-sm ${view === "grid" ? "bg-neutral-100 dark:bg-neutral-800" : "text-neutral-400 hover:text-neutral-900 dark:hover:text-white"}`}>
-              <LayoutGrid className="w-4 h-4" />
+        <div className="flex w-full sm:w-auto items-center gap-3">
+          <div className="flex items-center bg-white dark:bg-[#161618] border border-neutral-200 dark:border-neutral-800 rounded-md p-1 shrink-0">
+            <button onClick={() => setView("grid")} className={`p-1.5 md:p-2 rounded-sm ${view === "grid" ? "bg-neutral-100 dark:bg-neutral-800" : "text-neutral-400 hover:text-neutral-900 dark:hover:text-white"}`}>
+              <LayoutGrid className="w-4 h-4 md:w-5 md:h-5" />
             </button>
-            <button onClick={() => setView("list")} className={`p-1.5 rounded-sm ${view === "list" ? "bg-neutral-100 dark:bg-neutral-800" : "text-neutral-400 hover:text-neutral-900 dark:hover:text-white"}`}>
-              <ListIcon className="w-4 h-4" />
+            <button onClick={() => setView("list")} className={`p-1.5 md:p-2 rounded-sm ${view === "list" ? "bg-neutral-100 dark:bg-neutral-800" : "text-neutral-400 hover:text-neutral-900 dark:hover:text-white"}`}>
+              <ListIcon className="w-4 h-4 md:w-5 md:h-5" />
             </button>
           </div>
           {role === "Team Leader" && (
             <button 
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2 bg-neutral-900 dark:bg-white text-white dark:text-black px-4 py-2 text-sm font-medium rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-neutral-900 dark:bg-white text-white dark:text-black px-4 py-3 md:py-2 text-sm font-medium rounded-lg hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors min-h-[44px]"
             >
-              <Plus className="w-4 h-4" /> New Project
+              <Plus className="w-4 h-4 md:w-5 md:h-5" /> <span className="hidden xs:inline">New Project</span><span className="xs:hidden">New</span>
             </button>
           )}
         </div>
@@ -221,56 +221,58 @@ export function ProjectsPage() {
         </div>
       ) : (
         <div className="bg-white dark:bg-[#161618] border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden shadow-sm">
-          <table className="w-full text-sm text-left">
-            <thead className="text-xs text-neutral-500 bg-neutral-50 dark:bg-neutral-800/50 uppercase border-b border-neutral-200 dark:border-neutral-800">
-              <tr>
-                <th className="px-6 py-3 font-medium">Project Name</th>
-                <th className="px-6 py-3 font-medium">Status</th>
-                <th className="px-6 py-3 font-medium">Progress</th>
-                <th className="px-6 py-3 font-medium">Due Date</th>
-                {role === "Team Leader" && <th className="px-6 py-3 font-medium text-right">Actions</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {projects.map((project, i) => (
-                <tr key={project.id} className={`hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors ${i !== projects.length - 1 ? 'border-b border-neutral-200 dark:border-neutral-800' : ''}`}>
-                  <td className="px-6 py-4 font-medium">
-                    <Link to={`/app/projects/${project.id}`} className="hover:underline">{project.name}</Link>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`text-xs px-2 py-1 rounded-md font-medium ${
-                      project.status === 'Done' ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400' : 
-                      project.status === 'At Risk' ? 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400' : 
-                      'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400'
-                    }`}>{project.status}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-24 bg-neutral-100 dark:bg-neutral-800 rounded-full h-1.5">
-                        <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${project.progress || 0}%` }}></div>
-                      </div>
-                      <span className="text-xs text-neutral-500">{project.progress || 0}%</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-neutral-500">{project.due_date || "N/A"}</td>
-                  {role === "Team Leader" && (
-                    <td className="px-6 py-4 text-right">
-                      <button 
-                        className="text-neutral-400 hover:text-red-500 dark:hover:text-red-400 p-1.5 rounded-md transition-colors"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setDeleteModalProjectId(project.id);
-                        }}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  )}
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left min-w-[600px]">
+              <thead className="text-xs text-neutral-500 bg-neutral-50 dark:bg-neutral-800/50 uppercase border-b border-neutral-200 dark:border-neutral-800">
+                <tr>
+                  <th className="px-6 py-3 font-medium">Project Name</th>
+                  <th className="px-6 py-3 font-medium">Status</th>
+                  <th className="px-6 py-3 font-medium">Progress</th>
+                  <th className="px-6 py-3 font-medium">Due Date</th>
+                  {role === "Team Leader" && <th className="px-6 py-3 font-medium text-right">Actions</th>}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {projects.map((project, i) => (
+                  <tr key={project.id} className={`hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors ${i !== projects.length - 1 ? 'border-b border-neutral-200 dark:border-neutral-800' : ''}`}>
+                    <td className="px-6 py-4 font-medium">
+                      <Link to={`/app/projects/${project.id}`} className="hover:underline">{project.name}</Link>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`text-xs px-2 py-1 rounded-md font-medium ${
+                        project.status === 'Done' ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400' : 
+                        project.status === 'At Risk' ? 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400' : 
+                        'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400'
+                      }`}>{project.status}</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-24 bg-neutral-100 dark:bg-neutral-800 rounded-full h-1.5">
+                          <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${project.progress || 0}%` }}></div>
+                        </div>
+                        <span className="text-xs text-neutral-500">{project.progress || 0}%</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-neutral-500">{project.due_date || "N/A"}</td>
+                    {role === "Team Leader" && (
+                      <td className="px-6 py-4 text-right">
+                        <button 
+                          className="text-neutral-400 hover:text-red-500 dark:hover:text-red-400 p-1.5 rounded-md transition-colors"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setDeleteModalProjectId(project.id);
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )
 }
