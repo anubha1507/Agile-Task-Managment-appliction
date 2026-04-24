@@ -89,11 +89,19 @@ export function AppLayout() {
           <div className="flex items-center gap-3 bg-neutral-50 dark:bg-neutral-900/50 p-3 rounded-xl border border-neutral-100 dark:border-neutral-800">
             <img 
               src={profile?.avatar_url || `https://ui-avatars.com/api/?name=${profile?.full_name || 'U'}&background=random`} 
-              className="w-8 h-8 rounded-full"
+              className="w-8 h-8 rounded-full border border-neutral-200 dark:border-neutral-700"
             />
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold truncate">{profile?.full_name}</p>
-              <p className="text-[10px] text-neutral-500 font-medium uppercase tracking-wider">{role}</p>
+              <p className="text-xs font-bold truncate text-neutral-900 dark:text-white">{profile?.full_name}</p>
+              <span className={cn(
+                "text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md",
+                role === "HR" ? "bg-pink-100 text-pink-600 dark:bg-pink-500/20 dark:text-pink-400" :
+                role === "Manager" ? "bg-purple-100 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400" :
+                role === "Team Leader" ? "bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400" :
+                "bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400"
+              )}>
+                {role}
+              </span>
             </div>
             <button onClick={handleLogout} className="p-1 text-neutral-400 hover:text-red-500 transition-colors">
               <LogOut className="w-4 h-4" />
