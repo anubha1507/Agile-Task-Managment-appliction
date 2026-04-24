@@ -37,21 +37,14 @@ export function LandingPage() {
           </div>
           <div className="flex items-center gap-4">
             <LoginButton />
+          </div>
         </div>
       </header>
 
       <main>
         {/* Hero */}
         <section className="relative z-10 pt-36 pb-24 px-6 max-w-7xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/40 bg-orange-500/10 text-orange-400 text-xs font-semibold tracking-widest uppercase mb-8"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
-            Now Live — Agile for modern teams
-          </motion.div>
+
 
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
