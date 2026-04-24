@@ -19,14 +19,38 @@ export function AppLayout() {
 
   useEffect(() => {
     setMounted(true);
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (!session) navigate("/login");
-      else {
-        const { data } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
-        setProfile(data);
-        setLoading(false);
+    
+    const fetchProfile = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        navigate("/login");
+        return;
       }
-    });
+
+      // Try fetching from profiles table
+      const { data: profileData, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', session.user.id)
+        .single();
+
+      if (profileData) {
+        // Double check the role is present
+        const resolvedRole = profileData.role || session.user.user_metadata?.role || "Member";
+        setProfile({ ...profileData, role: resolvedRole });
+      } else {
+        // Fallback to auth metadata if profile row isn't found/ready
+        setProfile({
+          full_name: session.user.user_metadata?.full_name || "User",
+          role: session.user.user_metadata?.role || "Member"
+        });
+      }
+      
+      setLoading(false);
+    };
+
+    fetchProfile();
   }, [navigate]);
 
   const handleLogout = async () => {
