@@ -5,7 +5,7 @@ AgileFlow is a high-performance, visually stunning project management platform d
 ![AgileFlow Dashboard](https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1200&h=600&fit=crop)
 
 
-vedio presentation link - https://drive.google.com/file/d/1imSo1Ep3cOvoMblFZw0uO-5O-kvy9u5E/view?usp=sharing
+video presentation link - https://drive.google.com/file/d/1imSo1Ep3cOvoMblFZw0uO-5O-kvy9u5E/view?usp=sharing
 ## ✨ Key Features
 
 ### 🔐 Advanced Authentication
